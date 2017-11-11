@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const download = require('./download.js')
 const youtube = require('./youtube.js')
+const spotify = require('./spotify.js')
 
 app.get('/download', function(req, res) {
     let searchQuery = req.query.searchQuery
@@ -44,7 +45,21 @@ app.get('/download', function(req, res) {
     }
 })
 
-app.get('/get-next', function(req, res) {
-    
+app.get('/metadata', function(req, res) {
+    let searchQuery = req.query.searchQuery
+
+    if (searchQuery == undefined) {
+        error = {
+            error: {
+                reason: 'no-data-provided'
+            }
+        }
+        res.send(error)
+        return
+    } else {
+        spotify.getMetadata(searchQuery, function(result) {
+            res.send(result)
+        })
+    }
 })
 app.listen(3000)

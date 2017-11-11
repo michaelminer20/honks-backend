@@ -1,18 +1,28 @@
 {
   "name": "youtube-dl-audio-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Send a GET request to / with your video ID and you get back an Opus encoded file containing the video's audio track. Prerequisites: nodejs, ffprobe, ffmpeg, youtube-dl",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.15.5",
-    "google-auth-library": "^0.11.0",
+    "express": "^4.16.2",
     "googleapis": "^22.2.0",
-    "install": "^0.10.1",
-    "npm": "^5.5.1"
-  }
+    "npm": "^5.5.1",
+    "qs": "^6.5.1",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelminer20/youtube-dl-audio-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/michaelminer20/youtube-dl-audio-api/issues"
+  },
+  "homepage": "https://github.com/michaelminer20/youtube-dl-audio-api#readme"
 }

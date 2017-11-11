@@ -1,2 +1,4 @@
 audio
 node_modules
+client_secret.json
+spotify_access_token.json

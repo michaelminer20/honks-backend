@@ -1,5 +1,5 @@
 const fs = require('fs')
-const child_process = require('child_process');
+const child_process = require('child_process')
 const path = require('path')
 
 function getAudio(videoId, callback) {
