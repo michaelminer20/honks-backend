@@ -3,6 +3,7 @@ const app = express()
 const download = require('./download.js')
 const youtube = require('./youtube.js')
 const spotify = require('./spotify.js')
+const postgres = require('./postgres.js')
 
 app.get('/download', function(req, res) {
     let searchQuery = req.query.searchQuery
@@ -10,23 +11,11 @@ app.get('/download', function(req, res) {
 
     if (searchQuery == undefined) {
         if (videoId == undefined) {
-            error = {
-                error: {
-                    reason: 'no-data-provided'
-                }
-            }
-            res.send(error)
-            return
+            res.send({ error: 'invalid videoId'})            
         } else {
             download.getAudio(videoId, (path) => {
                 res.contentType = 'audio/ogg'
                 res.download(path)
-                // res.send({song: {
-                //     artist: 'artist',
-                //     title: 'title',
-                //     album: 'album',
-                //     genre: 'genre'
-                // }})
             })
         }
     } else {
@@ -34,32 +23,25 @@ app.get('/download', function(req, res) {
             download.getAudio(it, (path) => {
                 res.contentType = 'audio/ogg'
                 res.download(path)
-                // res.send({song: {
-                //     artist: 'artist',
-                //     title: 'title',
-                //     album: 'album',
-                //     genre: 'genre'
-                // }})
             })
         })
     }
 })
 
 app.get('/metadata', function(req, res) {
-    let searchQuery = req.query.searchQuery
+    let searchQuery = req.query.searchQuery;
+    let user = req.query.user;
 
-    if (searchQuery == undefined) {
-        error = {
-            error: {
-                reason: 'no-data-provided'
-            }
+    (async () => {
+        if (searchQuery == undefined) {
+            res.send({ error: 'invalid searchQuery'})
+        } else if (user == undefined || !(await postgres.userAllowed(user))) {
+            res.send({ error: 'user not allowed'})
+        } else {
+            spotify.getMetadata(searchQuery, function(result) {
+                res.send(result)
+            })
         }
-        res.send(error)
-        return
-    } else {
-        spotify.getMetadata(searchQuery, function(result) {
-            res.send(result)
-        })
-    }
+    })()  
 })
 app.listen(3000)
